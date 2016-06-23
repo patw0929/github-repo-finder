@@ -24,7 +24,10 @@
     "jquery": "^2.2.1",
     "jsdom": "^8.1.0",
     "mocha": "^2.4.5",
+    "node-sass": "^3.8.0",
     "react-addons-test-utils": "^15.1.0",
+    "sass-loader": "^3.2.1",
+    "style-loader": "^0.13.1",
     "webpack": "^1.12.9",
     "webpack-dev-server": "^1.14.0"
   },
