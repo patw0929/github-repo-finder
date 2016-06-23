@@ -16,12 +16,12 @@ export function loginUser(code) {
   const url = `${config.gatekeeper}/authenticate/${code}`;
 
   return dispatch => {
-    const request = axios.get(url).then(response => {
+    axios.get(url).then(response => {
       const token = response.data.token;
       dispatch(saveAccessToken(token));
       window.localStorage.setItem('token', token);
       browserHistory.push('/');
-    }).catch((error) => {
+    }).catch(error => {
       browserHistory.push('/');
     });
   };
