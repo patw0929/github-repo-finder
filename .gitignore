@@ -2,6 +2,7 @@
 /dist
 bundle.js
 npm-debug.log
+gatekeeper
 
 # IntelliJ
 *.iml
