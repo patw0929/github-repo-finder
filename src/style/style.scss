@@ -5,3 +5,25 @@ body {
 .nav-link {
   cursor: pointer;
 }
+
+.repos-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.repo-card {
+  width: 32%;
+  margin-bottom: 2%;
+  padding: 20px 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.repo-card > .thumbnail {
+  padding: 10px;
+}
+
+.repo-card > .card-title {
+  margin: 0 0 10px;
+}

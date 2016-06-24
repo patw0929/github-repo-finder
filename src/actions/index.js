@@ -1,14 +1,19 @@
 import { browserHistory } from 'react-router';
 import axios from 'axios';
-import { SAVE_ACCESS_TOKEN, GET_USER } from './types';
+import { AUTH_USER, UNAUTH_USER, GET_USER, FETCH_STARRED_REPOS } from './types';
 import config from '../config';
 
 const GITHUB_API_URL = 'https://api.github.com';
 
-export function saveAccessToken(token) {
+export function signinUser() {
   return {
-    type: SAVE_ACCESS_TOKEN,
-    payload: token,
+    type: AUTH_USER,
+  };
+}
+
+export function signoutUser() {
+  return {
+    type: UNAUTH_USER,
   };
 }
 
@@ -18,7 +23,7 @@ export function loginUser(code) {
   return dispatch => {
     axios.get(url).then(response => {
       const token = response.data.token;
-      dispatch(saveAccessToken(token));
+      dispatch(signinUser());
       window.localStorage.setItem('token', token);
       browserHistory.push('/');
     }).catch(error => {
@@ -29,25 +34,46 @@ export function loginUser(code) {
 
 export function logoutUser() {
   return dispatch => {
-    dispatch(saveAccessToken(null));
+    dispatch(signoutUser());
     window.localStorage.removeItem('token');
     browserHistory.push('/');
   };
 }
 
-export function getUser(token) {
+export function getUser(callback) {
   return dispatch => {
     axios.get(`${GITHUB_API_URL}/user`, {
       headers: {
-        authorization: `token ${token}`,
+        authorization: `token ${window.localStorage.getItem('token')}`,
       },
     }).then(response => {
       dispatch({
         type: GET_USER,
         payload: response.data,
       });
+
+      if (typeof callback === 'function') {
+        callback(response.data.login);
+      }
+    }).catch(error => {
+      // console.log('error:', error);
+    });
+  }
+}
+
+export function fetchStarredRepos() {
+  return dispatch => {
+    axios.get(`${GITHUB_API_URL}/user/starred`, {
+      headers: {
+        authorization: `token ${window.localStorage.getItem('token')}`,
+      },
+    }).then(response => {
+      dispatch({
+        type: FETCH_STARRED_REPOS,
+        payload: response.data,
+      });
     }).catch(error => {
       console.log('error:', error);
     });
-  }
+  };
 }

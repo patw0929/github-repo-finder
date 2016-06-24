@@ -1,10 +1,12 @@
 import { combineReducers } from 'redux';
-import loginReducer from './login';
+import authReducer from './auth';
 import userReducer from './user';
+import reposReducer from './starred_repos';
 
 const rootReducer = combineReducers({
-  token: loginReducer,
+  authenticated: authReducer,
   user: userReducer,
+  repos: reposReducer,
 });
 
 export default rootReducer;

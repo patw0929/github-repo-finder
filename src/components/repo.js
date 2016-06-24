@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getUser } from '../actions';
+import { getUser, fetchStarredRepos } from '../actions';
 
 class Repo extends React.Component {
   constructor(props) {
@@ -8,30 +8,45 @@ class Repo extends React.Component {
   }
 
   componentWillMount() {
-    if (this.props.token) {
-      this.props.getUser(this.props.token);
+    if (this.props.authenticated) {
+      this.props.getUser();
+      this.props.fetchStarredRepos();
     }
   }
 
-  componentWillUpdate(nextProps) {
-    if (nextProps.token) {
-      this.props.getUser(this.props.token);
-    }
+  renderRepos() {
+    console.log(this.props.repos);
+    return this.props.repos.map(repo => {
+      return (
+        <div key={repo.id} className="repo-card">
+          <h4 className="card-title">
+            <a href={repo.html_url} target="_blank">{repo.name}</a>
+          </h4>
+
+          <p className="card-text">
+            {repo.description}
+          </p>
+        </div>
+      );
+    });
   }
 
   render() {
-    if (!this.props.token) {
+    if (!this.props.authenticated) {
       return (
         <div>Please login first.</div>
       );
     }
 
     const { login, name } = this.props.user;
-    console.log(this.props.user);
 
     return (
       <div>
-        Hello {name}!
+        <p>Hello {name}!</p>
+
+        <div className="repos-list">
+          {this.renderRepos()}
+        </div>
       </div>
     );
   }
@@ -39,9 +54,14 @@ class Repo extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    token: state.token,
+    authenticated: state.authenticated,
     user: state.user,
+    repos: state.repos,
   };
 }
 
-export default connect(mapStateToProps, { getUser })(Repo);
+export default connect(mapStateToProps,
+  {
+    getUser,
+    fetchStarredRepos,
+  })(Repo);

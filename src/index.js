@@ -5,7 +5,7 @@ import { createStore, applyMiddleware } from 'redux';
 import { Router, hashHistory, browserHistory } from 'react-router';
 import reduxThunk from 'redux-thunk';
 import routes from './routes';
-import { SAVE_ACCESS_TOKEN } from './actions/types';
+import { AUTH_USER } from './actions/types';
 import reducers from './reducers';
 
 const createStoreWithMiddleware = applyMiddleware(reduxThunk)(createStore);
@@ -19,7 +19,7 @@ const history = process.env.NODE_ENV === 'production' ?
 const token = window.localStorage.getItem('token');
 // if token, we need update application state
 if (token) {
-  store.dispatch({ type: SAVE_ACCESS_TOKEN, payload: token });
+  store.dispatch({ type: AUTH_USER });
 }
 
 ReactDOM.render(

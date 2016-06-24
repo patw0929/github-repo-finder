@@ -27,35 +27,48 @@ client_id=${config.client_id}&scopes=user&redirect_uri=${config.redirect_uri}`;
     }
   }
 
-  render() {
-    let userTab = (
-      <a onClick={this.handleLogin.bind(this)} className="nav-link">Login</a>
-    );
-
-    if (this.props.token) {
-      userTab = (
-        <a onClick={this.handleLogout.bind(this)} className="nav-link">Logout</a>
-      );
+  renderLinks() {
+    if (this.props.authenticated) {
+      return [
+        <li key="repos" className="nav-item">
+          <Link to="repos" className="nav-link">Starred Repos</Link>
+        </li>,
+        <li key="logout" className="nav-item">
+          <a onClick={this.handleLogout.bind(this)} className="nav-link">Logout</a>
+        </li>
+      ];
     }
 
     return (
+      <li className="nav-item">
+        <a onClick={this.handleLogin.bind(this)} className="nav-link">Login</a>
+      </li>
+    );
+  }
+
+  render() {
+    return (
       <div>
-        <nav className="navbar navbar-fixed-top navbar-dark bg-inverse">
-          <Link className="navbar-brand" to="/">
-            GitHub Starred Project Viewer
-          </Link>
+        <header className="navbar navbar-fixed-top navbar-inverse">
+          <div className="navbar-header">
+            <Link className="navbar-brand" to="/">
+              GitHub Starred Project Viewer
+            </Link>
+          </div>
 
-          <ul className="nav navbar-nav">
-            <li className="nav-item">
-              {userTab}
-            </li>
-            <li className="nav-item">
-              <Link to="about" className="nav-link">About</Link>
-            </li>
-          </ul>
-        </nav>
+          <div className="container">
+            <nav className="navbar-collapse collapse">
+              <ul className="nav navbar-nav">
+                {this.renderLinks()}
+                <li className="nav-item">
+                  <Link to="about" className="nav-link">About</Link>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </header>
 
-        <main class="container">
+        <main className="container">
           {this.props.children}
         </main>
       </div>
@@ -65,7 +78,7 @@ client_id=${config.client_id}&scopes=user&redirect_uri=${config.redirect_uri}`;
 
 function mapStateToProps(state) {
   return {
-    token: state.token,
+    authenticated: state.authenticated,
   };
 }
 
