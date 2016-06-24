@@ -1,9 +1,9 @@
 {
-  "name": "github-starred-viewer",
+  "name": "github-repo-finder",
   "version": "1.0.0",
-  "description": "List the starred GitHub projects, and tag or comment on it.",
+  "description": "Search GitHub projects, and making tag or comment on it.",
   "main": "dist/app.min.js",
-  "repository": "git@github.com:patw0929/github-starred-viewer.git",
+  "repository": "git@github.com:patw0929/github-repo-finder.git",
   "scripts": {
     "start": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js",
     "test": "mocha --compilers js:babel-core/register --require ./test/test_helper.js --recursive ./test",

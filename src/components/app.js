@@ -31,7 +31,7 @@ client_id=${config.client_id}&scopes=user&redirect_uri=${config.redirect_uri}`;
     if (this.props.authenticated) {
       return [
         <li key="repos" className="nav-item">
-          <Link to="repos" className="nav-link">Starred Repos</Link>
+          <Link to="repos" className="nav-link">Search</Link>
         </li>,
         <li key="logout" className="nav-item">
           <a onClick={this.handleLogout.bind(this)} className="nav-link">Logout</a>
@@ -52,7 +52,7 @@ client_id=${config.client_id}&scopes=user&redirect_uri=${config.redirect_uri}`;
         <header className="navbar navbar-fixed-top navbar-inverse">
           <div className="navbar-header">
             <Link className="navbar-brand" to="/">
-              GitHub Starred Project Viewer
+              GitHub Repo Finder
             </Link>
           </div>
 
