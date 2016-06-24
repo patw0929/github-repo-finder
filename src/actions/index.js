@@ -5,7 +5,9 @@ import {
   UNAUTH_USER,
   GET_USER,
   SEARCH_REPOS,
-  ENTER_KEYWORD
+  ENTER_KEYWORD,
+  GET_STAR_STATUS,
+  TOGGLE_STAR,
 } from './types';
 import config from '../config';
 import { parsePage } from '../utils';
@@ -112,4 +114,49 @@ export function getRepo(onwer, repo) {
       console.log('getRepo error', error);
     });
   }
+}
+
+export function getStarStatus(owner, repo) {
+  return dispatch => {
+    axios.get(`${GITHUB_API_URL}/user/starred/${owner}/${repo}`, {
+      headers: {
+        authorization: `token ${window.localStorage.getItem('token')}`,
+      },
+    }).then(response => {
+      dispatch({
+        type: GET_STAR_STATUS,
+        payload: true,
+      });
+    }).catch(error => {
+      if (error.status !== 404) {
+        console.log('getStarStatus error', error);
+      } else {
+        dispatch({
+          type: GET_STAR_STATUS,
+          payload: false,
+        });
+      }
+    });
+  };
+}
+
+export function toggleStar(owner, repo, bool) {
+  return dispatch => {
+    const action = bool ? 'put' : 'delete';
+
+    axios({
+      url: `${GITHUB_API_URL}/user/starred/${owner}/${repo}`,
+      method: action,
+      headers: {
+        authorization: `token ${window.localStorage.getItem('token')}`,
+      },
+      data: '',
+    }).then(response => {
+      dispatch({
+        type: TOGGLE_STAR,
+      });
+    }).catch(error => {
+      console.log('toggleStar error', error);
+    });
+  };
 }

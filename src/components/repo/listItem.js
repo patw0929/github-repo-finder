@@ -24,7 +24,9 @@ const ListItem = (props) =>
       </span>
 
       <DetailView name={props.repo.name}
-        description={props.repo.description} />
+        description={props.repo.description}
+        owner={props.repo.owner.login}
+      />
     </div>
   </div>;
 

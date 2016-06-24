@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { ModalContainer, ModalDialog } from 'react-modal-dialog';
-import { getRepo } from '../../actions';
+import { getRepo, getStarStatus, toggleStar } from '../../actions';
 
 class DetailView extends Component {
   constructor(props) {
@@ -13,6 +13,9 @@ class DetailView extends Component {
   }
 
   handleClick() {
+    const { owner, name } = this.props;
+    this.props.getStarStatus(owner, name);
+
     this.setState({
       isShowingModal: true,
     });
@@ -24,7 +27,15 @@ class DetailView extends Component {
     });
   }
 
+  handleStar(bool) {
+    const { owner, name } = this.props;
+    this.props.toggleStar(owner, name, bool);
+  }
+
   render() {
+    const { name, description } = this.props.repo.data;
+    const starred = this.props.repo.starred;
+
     return (
       <button type="button"
         className="detail-btn btn btn-default btn-sm"
@@ -37,6 +48,14 @@ class DetailView extends Component {
             <div className="detail-view">
               <h1>{this.props.name}</h1>
               <p>{this.props.description}</p>
+
+
+              <button type="button"
+                className="detail-btn btn btn-default btn-sm"
+                onClick={() => {this.handleStar(!starred)}}>
+                <span className="glyphicon glyphicon-star"
+                  aria-hidden="true"></span> { starred ? 'Unstar' : 'Star' }
+              </button>
             </div>
           </ModalDialog>
         </ModalContainer>
@@ -52,4 +71,9 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { getRepo })(DetailView);
+export default connect(mapStateToProps,
+  {
+    getRepo,
+    getStarStatus,
+    toggleStar,
+  })(DetailView);
