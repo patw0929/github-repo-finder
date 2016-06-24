@@ -6,6 +6,20 @@ body {
   cursor: pointer;
 }
 
+.search-form {
+  .form-group {
+    display: flex;
+    width: 50%;
+    margin: 0 auto;
+    justify-content: center;
+  }
+
+  .search-input {
+    flex: 1;
+    margin-right: 10px;
+  }
+}
+
 .repos-list {
   display: flex;
   flex-wrap: wrap;

@@ -95,6 +95,13 @@ class Repo extends React.Component {
       <div>
         {this.renderUserInfo()}
 
+        <form className="search-form form-inline">
+          <div className="form-group">
+            <input type="search" className="search-input form-control" placeholder="Please enter the keywords..." />
+            <button type="submit" className="btn btn-primary">Search</button>
+          </div>
+        </form>
+
         {this.renderPages()}
 
         <div className="repos-list">
