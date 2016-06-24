@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { getUser, fetchStarredRepos } from '../actions';
+import { getUser, searchRepos, enterKeyword } from '../actions';
 
 class Repo extends React.Component {
   constructor(props) {
@@ -12,13 +12,16 @@ class Repo extends React.Component {
     const page = this.props.params.page || 1;
     if (this.props.authenticated) {
       this.props.getUser();
-      this.props.fetchStarredRepos(page);
+
+      if (this.props.keyword) {
+        this.props.searchRepos(this.props.keyword, page);
+      }
     }
   }
 
   onChangePage(e, page) {
     if (page && page !== this.props.params.page) {
-      this.props.fetchStarredRepos(page);
+      this.props.searchRepos(this.props.keyword, page);
     } else {
       e.preventDefault();
     }
@@ -26,6 +29,12 @@ class Repo extends React.Component {
   }
 
   renderRepos() {
+    if (this.props.repos.length === 0) {
+      return (
+        <p>No result.</p>
+      );
+    }
+
     return this.props.repos.map(repo => {
       return (
         <div key={repo.id} className="repo-card">
@@ -86,6 +95,17 @@ class Repo extends React.Component {
 
   handleSearch(e) {
     e.preventDefault();
+
+    const page = this.props.params.page || 1;
+
+    if (this.props.keyword) {
+      this.props.searchRepos(this.props.keyword, page);
+    }
+  }
+
+  handleChangeKeyword(e) {
+    console.log(e.target.value);
+    this.props.enterKeyword(e.target.value);
   }
 
   render() {
@@ -101,7 +121,11 @@ class Repo extends React.Component {
 
         <form className="search-form form-inline" onSubmit={(e) => {this.handleSearch(e)}}>
           <div className="form-group">
-            <input type="search" className="search-input form-control" placeholder="Please enter the keywords..." />
+            <input type="search" value={this.props.keyword}
+              onChange={(e) => {this.handleChangeKeyword(e)}}
+              className="search-input form-control"
+              placeholder="Please enter the keywords..."
+            />
             <button type="submit" className="btn btn-primary">Search</button>
           </div>
         </form>
@@ -122,6 +146,7 @@ function mapStateToProps(state) {
   return {
     authenticated: state.authenticated,
     user: state.user,
+    keyword: state.repos.keyword,
     repos: state.repos.repos,
     pages: state.repos.pages,
   };
@@ -130,5 +155,6 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps,
   {
     getUser,
-    fetchStarredRepos,
+    searchRepos,
+    enterKeyword,
   })(Repo);

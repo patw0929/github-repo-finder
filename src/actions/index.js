@@ -1,6 +1,12 @@
 import { browserHistory } from 'react-router';
 import axios from 'axios';
-import { AUTH_USER, UNAUTH_USER, GET_USER, FETCH_STARRED_REPOS } from './types';
+import {
+  AUTH_USER,
+  UNAUTH_USER,
+  GET_USER,
+  SEARCH_REPOS,
+  ENTER_KEYWORD
+} from './types';
 import config from '../config';
 import { parsePage } from '../utils';
 
@@ -62,22 +68,31 @@ export function getUser(callback) {
   }
 }
 
-export function fetchStarredRepos(page = 1) {
+export function enterKeyword(keyword) {
+  return {
+    type: ENTER_KEYWORD,
+    payload: keyword,
+  };
+}
+
+export function searchRepos(keyword, page = 1) {
   return dispatch => {
-    axios.get(`${GITHUB_API_URL}/user/starred?page=${page}`, {
+    // axios.get(`${GITHUB_API_URL}/user/starred?page=${page}`, {
+    axios.get(`${GITHUB_API_URL}/search/repositories?q=${keyword}&page=${page}`, {
       headers: {
         authorization: `token ${window.localStorage.getItem('token')}`,
       },
     }).then(response => {
       dispatch({
-        type: FETCH_STARRED_REPOS,
+        type: SEARCH_REPOS,
         payload: {
-          repos: response.data,
+          repos: response.data.items,
           pages: parsePage(response.headers.link),
+          keyword,
         },
       });
     }).catch(error => {
-      console.log('error:', error);
+      // console.log('error:', error);
     });
   };
 }
