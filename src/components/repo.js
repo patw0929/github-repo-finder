@@ -84,6 +84,10 @@ class Repo extends React.Component {
     return null;
   }
 
+  handleSearch(e) {
+    e.preventDefault();
+  }
+
   render() {
     if (!this.props.authenticated) {
       return (
@@ -95,7 +99,7 @@ class Repo extends React.Component {
       <div>
         {this.renderUserInfo()}
 
-        <form className="search-form form-inline">
+        <form className="search-form form-inline" onSubmit={(e) => {this.handleSearch(e)}}>
           <div className="form-group">
             <input type="search" className="search-input form-control" placeholder="Please enter the keywords..." />
             <button type="submit" className="btn btn-primary">Search</button>
