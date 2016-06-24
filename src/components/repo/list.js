@@ -3,7 +3,7 @@ import ListItem from './listItem';
 
 const List = ({ isEmpty, keyword, repos }) => {
   if (isEmpty) {
-    if (keyword !== '') {
+    if (keyword) {
       return (
         <div className="repos-list--empty">
           <p>No result.</p>
