@@ -13,7 +13,7 @@ class Header extends Component {
   handleLogin() {
     let code;
     window.location.href = `https://github.com/login/oauth/authorize?
-client_id=${config.client_id}&scopes=user&redirect_uri=${config.redirect_uri}`;
+client_id=${config.client_id}&scope=user,repo&redirect_uri=${config.redirect_uri}`;
   }
 
   handleLogout() {
