@@ -92,7 +92,7 @@ export function searchRepos(keyword, page = 1) {
         },
       });
     }).catch(error => {
-      // console.log('error:', error);
+      console.log('error:', error);
     });
   };
 }

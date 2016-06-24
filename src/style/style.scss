@@ -20,6 +20,12 @@ body {
   }
 }
 
+.repos-list--empty {
+  margin: 20px auto;
+  font-size: 16px;
+  text-align: center;
+}
+
 .repos-list {
   display: flex;
   flex-wrap: wrap;

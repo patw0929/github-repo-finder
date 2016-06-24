@@ -1,22 +1,39 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { getUser, searchRepos, enterKeyword } from '../actions';
-import ListItem from './repo/listItem';
+import List from './repo/list';
+import Pager from './repo/pager';
 
 class Repo extends Component {
   constructor(props) {
     super(props);
   }
 
+  static contextTypes = {
+    router: PropTypes.object,
+  };
+
   componentWillMount() {
     const page = this.props.params.page || 1;
+    const keyword = this.props.params.keyword;
+
     if (this.props.authenticated) {
       this.props.getUser();
 
-      if (this.props.keyword) {
-        this.props.searchRepos(this.props.keyword, page);
+      if (keyword) {
+        this.props.searchRepos(this.props.params.keyword, page);
       }
+    }
+
+    this.updateKeywordFromURL();
+  }
+
+  updateKeywordFromURL() {
+    const keyword = this.props.params.keyword;
+
+    if (keyword) {
+      this.props.enterKeyword(keyword);
     }
   }
 
@@ -27,39 +44,6 @@ class Repo extends Component {
       e.preventDefault();
     }
     e.target.blur();
-  }
-
-  renderRepos() {
-    if (this.props.repos.length === 0) {
-      return (
-        <p>No result.</p>
-      );
-    }
-
-    return this.props.repos.map(repo => {
-      return (
-        <ListItem repo={repo} key={repo.id} />
-      );
-    });
-  }
-
-  renderPages() {
-    if (this.props.pages) {
-      const { prev, next } = this.props.pages;
-
-      return (
-        <ul className="pager">
-          <li className={'previous ' + (!prev ? 'disabled' : '')}>
-            <Link to={ prev ? '/repos/' + prev : '' }
-              onClick={(e) => {this.onChangePage(e, prev)} }>Previous</Link>
-          </li>
-          <li className={'next ' + (!next ? 'disabled' : '')}>
-            <Link to={ next ? '/repos/' + next : '' }
-              onClick={ (e) => {this.onChangePage(e, next)} }>Next</Link>
-          </li>
-        </ul>
-      );
-    }
   }
 
   renderUserInfo() {
@@ -74,13 +58,12 @@ class Repo extends Component {
     return null;
   }
 
-  handleSearch(e) {
+  handleSubmit(e) {
     e.preventDefault();
 
-    const page = this.props.params.page || 1;
-
     if (this.props.keyword) {
-      this.props.searchRepos(this.props.keyword, page);
+      this.props.searchRepos(this.props.keyword);
+      this.context.router.push(`/repos/${this.props.keyword}`);
     }
   }
 
@@ -99,7 +82,7 @@ class Repo extends Component {
       <div>
         {this.renderUserInfo()}
 
-        <form className="search-form form-inline" onSubmit={(e) => {this.handleSearch(e)}}>
+        <form className="search-form form-inline" onSubmit={(e) => {this.handleSubmit(e)}}>
           <div className="form-group">
             <input type="search" value={this.props.keyword}
               onChange={(e) => {this.handleChangeKeyword(e)}}
@@ -110,13 +93,22 @@ class Repo extends Component {
           </div>
         </form>
 
-        {this.renderPages()}
+        <Pager pages={this.props.pages}
+          keyword={this.props.keyword}
+          isNotEmpty={this.props.repos.length > 0}
+          onChangePage={this.onChangePage.bind(this)}
+        />
 
-        <div className="repos-list">
-          {this.renderRepos()}
-        </div>
+        <List isEmpty={this.props.repos.length === 0}
+          repos={this.props.repos}
+          keyword={this.props.params.keyword}
+        />
 
-        {this.renderPages()}
+        <Pager pages={this.props.pages}
+          keyword={this.props.keyword}
+          isNotEmpty={this.props.repos.length > 0}
+          onChangePage={this.onChangePage.bind(this)}
+        />
       </div>
     );
   }
