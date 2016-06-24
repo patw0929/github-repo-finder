@@ -1,4 +1,5 @@
 import React from 'react';
+import DetailView from './detailView';
 import { truncate } from '../../utils';
 
 const ListItem = (props) =>
@@ -22,9 +23,8 @@ const ListItem = (props) =>
         {props.repo.owner.login}
       </span>
 
-      <button type="button" className="detail-btn btn btn-default btn-sm">
-        <span className="glyphicon glyphicon-search" aria-hidden="true"></span> Detail
-      </button>
+      <DetailView name={props.repo.name}
+        description={props.repo.description} />
     </div>
   </div>;
 

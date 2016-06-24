@@ -63,7 +63,7 @@ export function getUser(callback) {
         callback(response.data.login);
       }
     }).catch(error => {
-      // console.log('error:', error);
+      console.log('getUser error:', error);
     });
   }
 }
@@ -92,7 +92,24 @@ export function searchRepos(keyword, page = 1) {
         },
       });
     }).catch(error => {
-      console.log('error:', error);
+      console.log('searchRepos error:', error);
     });
   };
+}
+
+export function getRepo(onwer, repo) {
+  return dispatch => {
+    axios.get(`${GITHUB_API_URL}/${owner}/${repo}`, {
+      headers: {
+        authorization: `token ${window.localStorage.getItem('token')}`,
+      },
+    }).then(response => {
+      dispatch({
+        type: GET_REPO,
+        payload: response.data,
+      });
+    }).catch(error => {
+      console.log('getRepo error', error);
+    });
+  }
 }
