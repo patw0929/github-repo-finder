@@ -13,19 +13,31 @@ body {
 }
 
 .repo-card {
+  display: flex;
   width: 32%;
   margin-bottom: 2%;
   padding: 20px 15px;
   border: 1px solid #ddd;
   border-radius: 4px;
-}
+  flex-direction: column;
 
-.repo-card > .thumbnail {
-  padding: 10px;
-}
+  &__header {
+    flex-grow: 1;
+  }
 
-.repo-card > .card-title {
-  margin: 0 0 10px;
+  &__title {
+    margin: 0 0 10px;
+  }
+
+  &__info {
+    .glyphicon:before {
+      margin-right: 5px;
+    }
+  }
+
+  .info-star {
+    margin-right: 10px;
+  }
 }
 
 .pager {

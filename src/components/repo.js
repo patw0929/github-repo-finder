@@ -29,13 +29,25 @@ class Repo extends React.Component {
     return this.props.repos.map(repo => {
       return (
         <div key={repo.id} className="repo-card">
-          <h4 className="card-title">
-            <a href={repo.html_url} target="_blank">{repo.name}</a>
-          </h4>
+          <div className="repo-card__header">
+            <h4 className="repo-card__title">
+              <a href={repo.html_url} target="_blank">{repo.name}</a>
+            </h4>
 
-          <p className="card-text">
-            {repo.description}
-          </p>
+            <p className="repo-card__desc">
+              {repo.description}
+            </p>
+          </div>
+
+          <div className="repo-card__info">
+            <span className="info-star glyphicon glyphicon-star">
+              {repo.stargazers_count}
+            </span>
+
+            <span className="info-author glyphicon glyphicon-user">
+              {repo.owner.login}
+            </span>
+          </div>
         </div>
       );
     });
