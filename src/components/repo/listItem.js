@@ -1,4 +1,5 @@
 import React from 'react';
+import { truncate } from '../../utils';
 
 const ListItem = (props) =>
   <div className="repo-card">
@@ -8,7 +9,7 @@ const ListItem = (props) =>
       </h4>
 
       <p className="repo-card__desc">
-        {props.repo.description}
+        {truncate.call(props.repo.description, 200, true)}
       </p>
     </div>
 
