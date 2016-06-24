@@ -27,3 +27,50 @@ body {
 .repo-card > .card-title {
   margin: 0 0 10px;
 }
+
+.pager {
+  margin-left: 0;
+  margin-bottom: 18px;
+  list-style: none;
+  text-align: center;
+  *zoom: 1;
+
+  &:before,
+  &:after {
+    display: table;
+    content: "";
+  }
+
+  &:after {
+    clear: both;
+  }
+
+  li {
+    display: inline-block;
+  }
+
+  a {
+    display: inline-block;
+    padding: 5px 14px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+
+    &:hover {
+      text-decoration: none;
+      background-color: #f5f5f5;
+    }
+  }
+
+  .previous a {
+    margin-right: 10px;
+  }
+
+  .disabled a,
+  .disabled a:hover {
+    color: #999;
+    background-color: #fff;
+    cursor: default;
+    pointer-events: none;
+  }
+}

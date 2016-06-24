@@ -10,6 +10,6 @@ export default (
   <Route path="/" component={App}>
     <IndexRoute component={Welcome} />
     <Route path="about" component={About} />
-    <Route path="repos" component={requireAuth(Repo)} />
+    <Route path="repos(/:page)" component={requireAuth(Repo)} />
   </Route>
 );
