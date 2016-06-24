@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { getUser, searchRepos, enterKeyword } from '../actions';
+import ListItem from './repo/listItem';
 
-class Repo extends React.Component {
+class Repo extends Component {
   constructor(props) {
     super(props);
   }
@@ -37,27 +38,7 @@ class Repo extends React.Component {
 
     return this.props.repos.map(repo => {
       return (
-        <div key={repo.id} className="repo-card">
-          <div className="repo-card__header">
-            <h4 className="repo-card__title">
-              <a href={repo.html_url} target="_blank">{repo.name}</a>
-            </h4>
-
-            <p className="repo-card__desc">
-              {repo.description}
-            </p>
-          </div>
-
-          <div className="repo-card__info">
-            <span className="info-star glyphicon glyphicon-star">
-              {repo.stargazers_count}
-            </span>
-
-            <span className="info-author glyphicon glyphicon-user">
-              {repo.owner.login}
-            </span>
-          </div>
-        </div>
+        <ListItem repo={repo} key={repo.id} />
       );
     });
   }
@@ -104,7 +85,6 @@ class Repo extends React.Component {
   }
 
   handleChangeKeyword(e) {
-    console.log(e.target.value);
     this.props.enterKeyword(e.target.value);
   }
 
