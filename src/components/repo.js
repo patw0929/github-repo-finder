@@ -60,6 +60,18 @@ class Repo extends React.Component {
     }
   }
 
+  renderUserInfo() {
+    const { login, name } = this.props.user;
+
+    if (login && name) {
+      return (
+        <div className="well">Hello {name} ({login})!</div>
+      );
+    }
+
+    return null;
+  }
+
   render() {
     if (!this.props.authenticated) {
       return (
@@ -67,11 +79,11 @@ class Repo extends React.Component {
       );
     }
 
-    const { login, name } = this.props.user;
-
     return (
       <div>
-        <p>Hello {name}!</p>
+        {this.renderUserInfo()}
+
+        {this.renderPages()}
 
         <div className="repos-list">
           {this.renderRepos()}
