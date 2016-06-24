@@ -33,13 +33,18 @@ body {
 }
 
 .repo-card {
-  display: flex;
-  width: 32%;
+  display: block;
+  width: 100%;
   margin-bottom: 2%;
   padding: 20px 15px;
   border: 1px solid #ddd;
   border-radius: 4px;
-  flex-direction: column;
+
+  @media (min-width: 992px) {
+    display: flex;
+    width: 32%;
+    flex-direction: column;
+  }
 
   &__header {
     flex-grow: 1;
@@ -105,4 +110,8 @@ body {
     cursor: default;
     pointer-events: none;
   }
+}
+
+.detail-btn {
+  float: right;
 }

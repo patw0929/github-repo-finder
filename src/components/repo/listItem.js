@@ -21,6 +21,10 @@ const ListItem = (props) =>
       <span className="info-author glyphicon glyphicon-user">
         {props.repo.owner.login}
       </span>
+
+      <button type="button" className="detail-btn btn btn-default btn-sm">
+        <span className="glyphicon glyphicon-search" aria-hidden="true"></span> Detail
+      </button>
     </div>
   </div>;
 
