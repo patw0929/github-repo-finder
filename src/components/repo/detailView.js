@@ -55,7 +55,10 @@ class DetailView extends Component {
               </button>
 
               <h1>{this.props.name}</h1>
-              <p>{this.props.description}</p>
+
+              <div className="detail-description">
+                <p>{this.props.description}</p>
+              </div>
 
               <hr />
 

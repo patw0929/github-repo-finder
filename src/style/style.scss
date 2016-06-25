@@ -113,6 +113,30 @@ body {
 }
 
 .detail-view {
-  width: 500px;
+  width: 550px;
   height: 400px;
+  padding-right: 15px;
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  .detail-description {
+    word-break: break-all;
+  }
+}
+
+.tag-form__tags {
+  border-radius: 4px;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+
+  &.react-tagsinput--focused {
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075),
+      0 0 8px rgba(102, 175, 233, .6);
+    border-color: #66afe9;
+    outline: 0;
+  }
+
+  .react-tagsinput-tag,
+  .react-tagsinput-input {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
 }
