@@ -54,13 +54,9 @@ body {
     margin: 0 0 10px;
   }
 
-  &__info {
-    .glyphicon:before {
-      margin-right: 5px;
-    }
-  }
-
-  .info-star {
+  .info-star,
+  .info-author {
+    display: inline-block;
     margin-right: 10px;
   }
 }

@@ -15,13 +15,13 @@ const ListItem = (props) =>
     </div>
 
     <div className="repo-card__info">
-      <span className="info-star glyphicon glyphicon-star">
-        {props.repo.stargazers_count}
-      </span>
+      <div className="info-star">
+        <span className="glyphicon glyphicon-star"></span> {props.repo.stargazers_count}
+      </div>
 
-      <span className="info-author glyphicon glyphicon-user">
-        {props.repo.owner.login}
-      </span>
+      <div className="info-author">
+        <span className="glyphicon glyphicon-user"></span> {props.repo.owner.login}
+      </div>
 
       <DetailView name={props.repo.name}
         description={props.repo.description}

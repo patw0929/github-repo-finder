@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { ModalContainer, ModalDialog } from 'react-modal-dialog';
+import TagForm from './tagForm';
 import { getRepo, getStarStatus, toggleStar } from '../../actions';
 
 class DetailView extends Component {
@@ -46,16 +47,19 @@ class DetailView extends Component {
         <ModalContainer onClose={() => {this.handleClose()}}>
           <ModalDialog onClose={() => {this.handleClose()}}>
             <div className="detail-view">
-              <h1>{this.props.name}</h1>
-              <p>{this.props.description}</p>
-
-
               <button type="button"
                 className="detail-btn btn btn-default btn-sm"
                 onClick={() => {this.handleStar(!starred)}}>
                 <span className="glyphicon glyphicon-star"
                   aria-hidden="true"></span> { starred ? 'Unstar' : 'Star' }
               </button>
+
+              <h1>{this.props.name}</h1>
+              <p>{this.props.description}</p>
+
+              <hr />
+
+              <TagForm />
             </div>
           </ModalDialog>
         </ModalContainer>
