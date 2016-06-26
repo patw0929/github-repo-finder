@@ -1,8 +1,3 @@
-DROP DATABASE IF EXISTS github_repo_finder;
-CREATE DATABASE github_repo_finder;
-
-\c github_repo_finder;
-
 CREATE TABLE tags (
   ID SERIAL PRIMARY KEY,
   repo VARCHAR,
