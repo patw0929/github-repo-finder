@@ -6,8 +6,8 @@ const config = {
     api_uri: 'http://localhost:9999/api',
   },
   production: {
-    client_id: '',
-    redirect_uri: '',
+    client_id: '54934ebbee82755104cd',
+    redirect_uri: 'http://github-repo-finder.patw.me',
     gatekeeper: 'https://github-repo-finder.herokuapp.com',
     api_uri: 'https://github-repo-finder.herokuapp.com/api'
   },
