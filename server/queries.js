@@ -1,6 +1,21 @@
 var _ = require('lodash');
 var promise = require('bluebird');
 var github = require('octonode');
+var fs      = require('fs');
+
+// Load config defaults from JSON file.
+// Environment variables override defaults.
+function loadConfig() {
+  var config = JSON.parse(fs.readFileSync(__dirname+ '/config.json', 'utf-8'));
+  for (var i in config) {
+    config[i] = process.env[i.toUpperCase()] || config[i];
+  }
+  console.log('Configuration');
+  console.log(config);
+  return config;
+}
+
+var config = loadConfig();
 
 var options = {
   // Initialization Options
@@ -8,7 +23,7 @@ var options = {
 };
 
 var pgp = require('pg-promise')(options);
-var connectionString = 'postgres://localhost:5432/github_repo_finder';
+var connectionString = config.pgsql_url; //'postgres://localhost:5432/github_repo_finder';
 var db = pgp(connectionString);
 
 function getGitHubUser(token) {
@@ -77,7 +92,7 @@ function retrieveTags(repoFullName) {
       };
     })
     .catch(function (err) {
-      return next(err);
+      console.log(err);
     });
 }
 
