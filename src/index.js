@@ -11,7 +11,8 @@ import reducers from './reducers';
 const createStoreWithMiddleware = applyMiddleware(reduxThunk)(createStore);
 const store = createStoreWithMiddleware(reducers);
 
-const history = browserHistory;
+const history = process.env.NODE_ENV === 'production' ?
+  hashHistory : browserHistory;
 
 const token = window.localStorage.getItem('token');
 // if token, we need update application state
