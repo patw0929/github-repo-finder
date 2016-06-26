@@ -9,9 +9,13 @@ body {
 .search-form {
   .form-group {
     display: flex;
-    width: 50%;
+    width: 100%;
     margin: 0 auto;
     justify-content: center;
+
+    @media (min-width: 992px) {
+      width: 50%;
+    }
   }
 
   .search-input {
