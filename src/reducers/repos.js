@@ -2,7 +2,7 @@ import { SEARCH_REPOS, ENTER_KEYWORD } from '../actions/types';
 
 const initialState = {
   keyword: '',
-  repos: [],
+  items: [],
   pages: {},
 };
 

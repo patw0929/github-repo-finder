@@ -1,4 +1,5 @@
 import React from 'react';
+import InfoTagList from './infoTagList';
 import DetailView from './detailView';
 import { truncate } from '../../utils';
 
@@ -23,8 +24,9 @@ const ListItem = (props) =>
         <span className="glyphicon glyphicon-user"></span> {props.repo.owner.login}
       </div>
 
+      <InfoTagList tags={props.repo.tags} />
+
       <DetailView name={props.repo.name}
-        description={props.repo.description}
         owner={props.repo.owner.login}
       />
     </div>

@@ -6,3 +6,5 @@ export const GET_REPO = 'GET_REPO';
 export const ENTER_KEYWORD = 'ENTER_KEYWORD';
 export const GET_STAR_STATUS = 'GET_STAR_STATUS';
 export const TOGGLE_STAR = 'TOGGLE_STAR';
+export const FETCH_TAGS = 'FETCH_TAGS';
+export const CLEAN_REPO = 'CLEAN_REPO';

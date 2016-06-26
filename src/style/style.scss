@@ -55,9 +55,37 @@ body {
   }
 
   .info-star,
-  .info-author {
+  .info-author,
+  .info-tags {
     display: inline-block;
     margin-right: 10px;
+  }
+
+  .info-tags span {
+    margin-right: 2px;
+  }
+
+  .info-tags__list {
+    display: inline-block;
+    margin-left: 5px;
+    padding: 0;
+    list-style: none;
+
+    &-item {
+      display: inline-block;
+      margin-right: 3px;
+
+      &:after {
+        display: inline-block;
+        content: ", ";
+      }
+
+      &:last-child {
+        &:after {
+          display: none;
+        }
+      }
+    }
   }
 }
 
@@ -124,9 +152,18 @@ body {
   }
 }
 
+.detail-tag {
+  display: inline-block;
+  margin: 0 5px 5px 0;
+}
+
 .tag-form__tags {
   border-radius: 4px;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+
+  .has-error & {
+    border: 1px solid #a94442;
+  }
 
   &.react-tagsinput--focused {
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075),

@@ -10,7 +10,7 @@ export function parsePage(link) {
 
     for (let i = 0, max = pageLinks.length; i < max; i++) {
       const key = pageLinks[i][1].replace(/rel=/ig, '').replace(/"/g, '');
-      const page = pageLinks[i][0].trim().replace(/.*page=(\d+)>+/ig, '$1');
+      const page = pageLinks[i][0].trim().replace(/.*page=(\d+).*>+/ig, '$1');
 
       pages[key] = page;
     }

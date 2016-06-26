@@ -6,8 +6,11 @@ import {
   GET_USER,
   SEARCH_REPOS,
   ENTER_KEYWORD,
+  GET_REPO,
   GET_STAR_STATUS,
   TOGGLE_STAR,
+  FETCH_TAGS,
+  CLEAN_REPO,
 } from './types';
 import config from '../config';
 import { parsePage } from '../utils';
@@ -79,17 +82,32 @@ export function enterKeyword(keyword) {
 
 export function searchRepos(keyword, page = 1) {
   return dispatch => {
-    // axios.get(`${GITHUB_API_URL}/user/starred?page=${page}`, {
-    axios.get(`${GITHUB_API_URL}/search/repositories?q=${keyword}&page=${page}`, {
+    // axios.get(`${GITHUB_API_URL}/search/repositories?q=${keyword}&page=${page}`, {
+    axios.get(`${config.api_uri}/repos?q=${keyword}&page=${page}`, {
       headers: {
         authorization: `token ${window.localStorage.getItem('token')}`,
       },
     }).then(response => {
+      const items = response.data.items;
+      let parsedItems = [];
+      items.map(item => {
+        parsedItems.push({
+          id: item.id,
+          full_name: item.full_name,
+          owner: item.owner,
+          name: item.name,
+          description: item.description,
+          stargazers_count: item.stargazers_count,
+          html_url: item.html_url,
+          tags: item.tags,
+        });
+      });
+
       dispatch({
         type: SEARCH_REPOS,
         payload: {
-          repos: response.data.items,
-          pages: parsePage(response.headers.link),
+          items: parsedItems,
+          pages: parsePage(response.data.pages),
           keyword,
         },
       });
@@ -99,18 +117,34 @@ export function searchRepos(keyword, page = 1) {
   };
 }
 
-export function getRepo(onwer, repo) {
+function getRepoInfo(owner, repo) {
+  return axios.get(`${GITHUB_API_URL}/repos/${owner}/${repo}`, {
+    headers: {
+      authorization: `token ${window.localStorage.getItem('token')}`,
+    },
+  });
+}
+
+function getRepoTags(repoFullName) {
+  return axios.get(`${config.api_uri}/tags/${repoFullName}`, {
+    headers: {
+      authorization: `token ${window.localStorage.getItem('token')}`,
+    },
+  });
+}
+
+export function getRepo(owner, repo) {
   return dispatch => {
-    axios.get(`${GITHUB_API_URL}/${owner}/${repo}`, {
-      headers: {
-        authorization: `token ${window.localStorage.getItem('token')}`,
-      },
-    }).then(response => {
+    axios.all([getRepoInfo(owner, repo), getRepoTags(`${owner}/${repo}`)])
+    .then(axios.spread((info, tags) => {
       dispatch({
         type: GET_REPO,
-        payload: response.data,
+        payload: {
+          info: info.data,
+          tags: tags.data.data,
+        },
       });
-    }).catch(error => {
+    })).catch(error => {
       console.log('getRepo error', error);
     });
   }
@@ -158,5 +192,43 @@ export function toggleStar(owner, repo, bool) {
     }).catch(error => {
       console.log('toggleStar error', error);
     });
+  };
+}
+
+export function fetchTags(repo) {
+  return dispatch => {
+    getRepoTags(repo).then(response => {
+      dispatch({
+        type: FETCH_TAGS,
+        payload: response.data.data,
+      });
+    }).catch(error => {
+      console.log('fetchTags error', error);
+    });
+  };
+}
+
+export function postTags(repo, tag, isPublic) {
+  return dispatch => {
+    axios.post(`${config.api_uri}/tags`, {
+      headers: {
+        authorization: `token ${window.localStorage.getItem('token')}`,
+      },
+      data: {
+        repo,
+        tag,
+        isPublic,
+      },
+    }).then(response => {
+      dispatch(fetchTags(repo));
+    }).catch(error => {
+      console.log('postTags error', error);
+    });
+  };
+}
+
+export function cleanRepo() {
+  return {
+    type: CLEAN_REPO,
   };
 }

@@ -2,7 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { ModalContainer, ModalDialog } from 'react-modal-dialog';
 import TagForm from './tagForm';
-import { getRepo, getStarStatus, toggleStar } from '../../actions';
+import TagList from './tagList';
+import { getRepo, getStarStatus, toggleStar, cleanRepo } from '../../actions';
 
 class DetailView extends Component {
   constructor(props) {
@@ -15,6 +16,7 @@ class DetailView extends Component {
 
   handleClick() {
     const { owner, name } = this.props;
+    this.props.getRepo(owner, name);
     this.props.getStarStatus(owner, name);
 
     this.setState({
@@ -26,6 +28,7 @@ class DetailView extends Component {
     this.setState({
       isShowingModal: false,
     });
+    this.props.cleanRepo();
   }
 
   handleStar(bool) {
@@ -34,8 +37,8 @@ class DetailView extends Component {
   }
 
   render() {
-    const { name, description } = this.props.repo.data;
     const starred = this.props.repo.starred;
+    const tags = this.props.repo.tags;
 
     return (
       <button type="button"
@@ -54,13 +57,15 @@ class DetailView extends Component {
                   aria-hidden="true"></span> { starred ? 'Unstar' : 'Star' }
               </button>
 
-              <h1>{this.props.name}</h1>
+              <h1>{this.props.repo.data.name}</h1>
 
               <div className="detail-description">
-                <p>{this.props.description}</p>
+                <p>{this.props.repo.data.description}</p>
               </div>
 
               <hr />
+
+              <TagList tags={tags} />
 
               <TagForm />
             </div>
@@ -83,4 +88,5 @@ export default connect(mapStateToProps,
     getRepo,
     getStarStatus,
     toggleStar,
+    cleanRepo,
   })(DetailView);

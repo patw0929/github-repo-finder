@@ -119,7 +119,7 @@ function mapStateToProps(state) {
     authenticated: state.authenticated,
     user: state.user,
     keyword: state.repos.keyword,
-    repos: state.repos.repos,
+    repos: state.repos.items,
     pages: state.repos.pages,
   };
 }

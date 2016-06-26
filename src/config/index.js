@@ -3,6 +3,7 @@ const config = {
     client_id: 'f23edd37b87fc3cc02de',
     redirect_uri: 'http://localhost:8080',
     gatekeeper: 'http://localhost:9999',
+    api_uri: 'http://localhost:9999/api',
   },
   production: {},
 }
