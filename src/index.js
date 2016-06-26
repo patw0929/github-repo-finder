@@ -11,10 +11,7 @@ import reducers from './reducers';
 const createStoreWithMiddleware = applyMiddleware(reduxThunk)(createStore);
 const store = createStoreWithMiddleware(reducers);
 
-// Use hash location for Github Pages
-// but switch to HTML5 history locally.
-const history = process.env.NODE_ENV === 'production' ?
-  hashHistory : browserHistory;
+const history = browserHistory;
 
 const token = window.localStorage.getItem('token');
 // if token, we need update application state
