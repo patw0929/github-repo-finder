@@ -5,7 +5,12 @@ const config = {
     gatekeeper: 'http://localhost:9999',
     api_uri: 'http://localhost:9999/api',
   },
-  production: {},
+  production: {
+    client_id: '',
+    redirect_uri: '',
+    gatekeeper: 'https://github-repo-finder.herokuapp.com',
+    api_uri: 'https://github-repo-finder.herokuapp.com/api'
+  },
 }
 
 const ENV = process.env.NODE_ENV === 'production' ? 'production' : 'development';
