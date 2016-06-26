@@ -5,7 +5,7 @@ import { getUser, searchRepos, enterKeyword } from '../actions';
 import List from './repo/list';
 import Pager from './repo/pager';
 
-class Repo extends Component {
+class Repos extends Component {
   constructor(props) {
     super(props);
   }
@@ -129,4 +129,4 @@ export default connect(mapStateToProps,
     getUser,
     searchRepos,
     enterKeyword,
-  })(Repo);
+  })(Repos);

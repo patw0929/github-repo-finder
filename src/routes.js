@@ -3,13 +3,13 @@ import { Route, IndexRoute } from 'react-router';
 import requireAuth from './components/require_authentication';
 import App from './components/app';
 import Welcome from './components/welcome';
-import Repo from './components/repo';
+import Repos from './components/repos';
 import About from './components/about';
 
 export default (
   <Route path="/" component={App}>
     <IndexRoute component={Welcome} />
     <Route path="about" component={About} />
-    <Route path="repos(/:keyword)(/:page)" component={requireAuth(Repo)} />
+    <Route path="repos(/:keyword)(/:page)" component={requireAuth(Repos)} />
   </Route>
 );
