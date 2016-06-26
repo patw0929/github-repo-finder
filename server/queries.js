@@ -116,6 +116,34 @@ function getTagsByRepo(req, res, next) {
     });
 }
 
+function getTagsByUser(req, res, next) {
+  var token;
+  try {
+    token = req.body.headers.authorization.replace('token ', '');
+  } catch (err) {
+    return next('no token');
+  }
+
+  var owner = req.params.owner;
+  var repo = req.params.repo;
+  var username = getGitHubUser(token);
+
+  db.any(`SELECT tag
+    FROM tags WHERE repo = $1 AND username = $2
+    ORDER BY created_at DESC LIMIT 20`,
+    [owner + '/' + repo, username])
+    .then(function (data) {
+      res.status(200)
+        .json({
+          status: 'success',
+          data: data
+        });
+    })
+    .catch(function (err) {
+      return next(err);
+    });
+}
+
 function createTag(req, res, next) {
   var token;
   try {
@@ -144,5 +172,6 @@ function createTag(req, res, next) {
 module.exports = {
   searchRepos: searchRepos,
   getTagsByRepo: getTagsByRepo,
+  getTagsByUser: getTagsByUser,
   createTag: createTag,
 };
