@@ -51,13 +51,22 @@ client_id=${config.client_id}&scope=user,repo&redirect_uri=${config.redirect_uri
     return (
       <header className="navbar navbar-fixed-top navbar-inverse">
         <div className="navbar-header">
+          <button type="button" className="navbar-toggle collapsed"
+            data-toggle="collapse"
+            data-target="#bs-example-navbar-collapse-1"
+            aria-expanded="false">
+            <span className="sr-only">Toggle navigation</span>
+            <span className="icon-bar"></span>
+            <span className="icon-bar"></span>
+            <span className="icon-bar"></span>
+          </button>
           <Link className="navbar-brand" to="/">
             GitHub Repo Finder
           </Link>
         </div>
 
         <div className="container">
-          <nav className="navbar-collapse collapse">
+          <nav className="navbar-collapse collapse" id="bs-example-navbar-collapse-1">
             <ul className="nav navbar-nav">
               {this.renderLinks()}
               <li className="nav-item">
