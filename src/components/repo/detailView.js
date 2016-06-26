@@ -48,7 +48,7 @@ class DetailView extends Component {
       {
         this.state.isShowingModal &&
         <ModalContainer onClose={() => {this.handleClose()}}>
-          <ModalDialog onClose={() => {this.handleClose()}}>
+          <ModalDialog style={{width: '80%'}} onClose={() => {this.handleClose()}}>
             <div className="detail-view">
               <button type="button"
                 className="detail-btn btn btn-default btn-sm"
