@@ -193,7 +193,7 @@ function createTag(req, res, next) {
     db.one('SELECT COUNT(*) FROM tags WHERE username = $1 AND tag = $2',
       [username, req.body.data.tag])
       .then(function (data) {
-        if (data.count === 0) {
+        if (+data.count === 0) {
           db.none('INSERT INTO tags (username, repo, tag, isPublic)' +
               'VALUES($1, $2, $3, $4)',
             [username, req.body.data.repo, req.body.data.tag, req.body.data.isPublic])
