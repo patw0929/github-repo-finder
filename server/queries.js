@@ -110,6 +110,22 @@ function retrieveTags(repoFullName) {
     });
 }
 
+function retrieveRandomTags(req, res, next) {
+  db.any(`SELECT tag FROM tags
+    WHERE isPublic = true GROUP BY tag ORDER BY random() LIMIT 10;`
+  ).then(function (data) {
+    var result = _.map(data, 'tag');
+    res.status(200)
+      .json({
+        status: 'success',
+        data: result
+      });
+  })
+  .catch(function (err) {
+    return next(err);
+  });
+}
+
 function getTagsByRepo(req, res, next) {
   var owner = req.params.owner;
   var repo = req.params.repo;
@@ -267,6 +283,7 @@ function removeTag(req, res, next) {
 }
 
 module.exports = {
+  retrieveRandomTags: retrieveRandomTags,
   searchRepos: searchRepos,
   getTagsByRepo: getTagsByRepo,
   getTagsByUser: getTagsByUser,

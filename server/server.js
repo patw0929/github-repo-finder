@@ -83,6 +83,7 @@ app.get('/authenticate/:code', function(req, res) {
   });
 });
 
+app.get('/api/tags/random', db.retrieveRandomTags);
 app.get('/api/repos', db.searchRepos);
 app.get('/api/tags/:owner/:repo', db.getTagsByRepo);
 app.get('/api/tags/by_user/:owner/:repo', db.getTagsByUser);
