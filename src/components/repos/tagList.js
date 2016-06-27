@@ -1,13 +1,13 @@
 import React from 'react';
 
-const TagList = ({ tags }) => {
-  if (!tags.length) {
+const TagList = ({ tags, type }) => {
+  if (!tags || !tags.length) {
     return null;
   }
 
   return (
     <div>
-      <h5>Community Tags</h5>
+      <h5>{ type === 'public' ? 'Community Tags' : 'My Private Tags' }</h5>
 
       <div className="detail-tags">
         {tags && tags.map(tag => {

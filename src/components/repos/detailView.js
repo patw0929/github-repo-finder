@@ -65,7 +65,9 @@ class DetailView extends Component {
 
               <hr />
 
-              <TagList tags={tags} />
+              <TagList tags={tags.public} type="public" />
+
+              <TagList tags={tags.private} type="private" />
 
               <TagForm />
             </div>

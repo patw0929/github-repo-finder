@@ -8,7 +8,7 @@ import {
 
 const initialStatus = {
   data: {},
-  tags: [],
+  tags: {},
   starred: false,
 };
 
