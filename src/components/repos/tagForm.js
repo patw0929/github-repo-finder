@@ -58,6 +58,7 @@ class TagForm extends Component {
                 onlyUnique={true}
                 maxTags={10}
                 addOnBlur={true}
+                addKeys={[9, 13, 32]}
               />
               <input {...tags} type="hidden" value={this.state.tags} />
               <div className="help-block">
