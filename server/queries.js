@@ -133,7 +133,7 @@ function getTagsByRepo(req, res, next) {
 function getTagsByUser(req, res, next) {
   var token;
   try {
-    token = req.body.headers.authorization.replace('token ', '');
+    token = req.headers.authorization.replace('token ', '');
   } catch (err) {
     return next('no token');
   }
@@ -143,13 +143,14 @@ function getTagsByUser(req, res, next) {
   getGitHubUser(token, function (username) {
     db.any(`SELECT tag
       FROM tags WHERE repo = $1 AND username = $2
-      ORDER BY created_at DESC LIMIT 20`,
+      ORDER BY created_at DESC`,
       [owner + '/' + repo, username])
       .then(function (data) {
+        var tags = _.map(data, 'tag');
         res.status(200)
           .json({
             status: 'success',
-            data: data
+            data: tags
           });
       })
       .catch(function (err) {
