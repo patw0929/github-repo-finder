@@ -1,4 +1,4 @@
-import { SEARCH_REPOS_BY_TAG } from '../action/types';
+import { SEARCH_REPOS_BY_TAG } from '../actions/types';
 
 const initialState = {
   tag: '',

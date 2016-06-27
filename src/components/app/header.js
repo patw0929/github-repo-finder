@@ -34,6 +34,9 @@ client_id=${config.client_id}&scope=user,repo&redirect_uri=${config.redirect_uri
         <li key="repos" className="nav-item">
           <Link to="/repos" className="nav-link">Search</Link>
         </li>,
+        <li key="tags" className="nav-item">
+          <Link to="/tags" className="nav-link">Tags</Link>
+        </li>,
         <li key="logout" className="nav-item">
           <a onClick={this.handleLogout.bind(this)} className="nav-link">Logout</a>
         </li>
