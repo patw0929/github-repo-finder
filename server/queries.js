@@ -141,8 +141,8 @@ function getTagsByRepo(req, res, next) {
         .json({
           status: 'success',
           data: {
-            tags: data[0],
-            tags_me: data[1]
+            public: data[0],
+            private: data[1]
           }
         });
     })
