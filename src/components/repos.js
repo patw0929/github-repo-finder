@@ -2,8 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { getUser, searchRepos, enterKeyword } from '../actions';
-import List from './repo/list';
-import Pager from './repo/pager';
+import List from './repos/list';
+import Pager from './repos/pager';
 
 class Repos extends Component {
   constructor(props) {
