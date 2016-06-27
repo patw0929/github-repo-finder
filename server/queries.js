@@ -114,20 +114,43 @@ function getTagsByRepo(req, res, next) {
   var owner = req.params.owner;
   var repo = req.params.repo;
 
-  db.any(`SELECT MAX(id) AS id, tag, COUNT(tag) AS vote
-    FROM tags WHERE repo = $1 AND isPublic = true
-    GROUP BY tag ORDER BY vote DESC LIMIT 10`,
-    owner + '/' + repo)
+  var token;
+  try {
+    token = req.headers.authorization.replace('token ', '');
+  } catch (err) {
+    return next('no token');
+  }
+
+  getGitHubUser(token, function (username) {
+    db.task(function (t) {
+      return t.batch([
+        t.any(`SELECT MAX(id) AS id, tag, COUNT(tag) AS vote
+          FROM tags WHERE repo = $1 AND isPublic = true
+          GROUP BY tag ORDER BY vote DESC LIMIT 10`,
+          owner + '/' + repo),
+        t.any(`SELECT id, tag
+          FROM tags WHERE repo = $1 AND username = $2 AND isPublic = false
+          ORDER BY created_at DESC`,
+          [owner + '/' + repo, username])
+      ]);
+    })
     .then(function (data) {
+      console.log(data[0]);
+      console.log(data[1]);
       res.status(200)
         .json({
           status: 'success',
-          data: data
+          data: {
+            tags: data[0],
+            tags_me: data[1]
+          }
         });
     })
     .catch(function (err) {
+      console.log(err);
       return next(err);
     });
+  });
 }
 
 function getTagsByUser(req, res, next) {
