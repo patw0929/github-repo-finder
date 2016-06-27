@@ -129,14 +129,12 @@ function getTagsByRepo(req, res, next) {
           GROUP BY tag ORDER BY vote DESC LIMIT 10`,
           owner + '/' + repo),
         t.any(`SELECT id, tag
-          FROM tags WHERE repo = $1 AND username = $2 AND isPublic = false
+          FROM tags WHERE repo = $1 AND username = $2
           ORDER BY created_at DESC`,
           [owner + '/' + repo, username])
       ]);
     })
     .then(function (data) {
-      console.log(data[0]);
-      console.log(data[1]);
       res.status(200)
         .json({
           status: 'success',
@@ -147,7 +145,6 @@ function getTagsByRepo(req, res, next) {
         });
     })
     .catch(function (err) {
-      console.log(err);
       return next(err);
     });
   });
@@ -196,9 +193,7 @@ function createTag(req, res, next) {
     db.one('SELECT COUNT(*) FROM tags WHERE username = $1 AND tag = $2',
       [username, req.body.data.tag])
       .then(function (data) {
-        console.log(data);
-
-        if (data === 0) {
+        if (data.count === 0) {
           db.none('INSERT INTO tags (username, repo, tag, isPublic)' +
               'VALUES($1, $2, $3, $4)',
             [username, req.body.data.repo, req.body.data.tag, req.body.data.isPublic])
@@ -225,9 +220,56 @@ function createTag(req, res, next) {
   });
 }
 
+function removeTag(req, res, next) {
+  var token;
+  try {
+    token = req.headers.authorization.replace('token ', '');
+  } catch (err) {
+    return next('no token');
+  }
+
+  getGitHubUser(token, function (username) {
+    db.one('SELECT COUNT(*) FROM tags WHERE username = $1 AND id = $2',
+      [username, req.params.id])
+      .then(function (data) {
+        if (+data.count === 1) {
+          db.result('DELETE FROM tags WHERE username = $1 AND id = $2',
+            [username, req.params.id])
+            .then(function (result) {
+              if (result.rowCount) {
+                res.status(200)
+                  .json({
+                    status: 'success'
+                  });
+              } else {
+                res.status(404)
+                  .json({
+                    status: 'failed',
+                    message: 'delete failed'
+                  });
+              }
+            })
+            .catch(function (err) {
+              return next(err);
+            });
+        } else {
+          res.status(404)
+            .json({
+              status: 'failed',
+              message: 'no this data'
+            });
+        }
+      })
+      .catch(function (err) {
+        return next(err);
+      });
+  });
+}
+
 module.exports = {
   searchRepos: searchRepos,
   getTagsByRepo: getTagsByRepo,
   getTagsByUser: getTagsByUser,
+  removeTag: removeTag,
   createTag: createTag,
 };

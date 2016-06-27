@@ -87,6 +87,7 @@ app.get('/api/repos', db.searchRepos);
 app.get('/api/tags/:owner/:repo', db.getTagsByRepo);
 app.get('/api/tags/by_user/:owner/:repo', db.getTagsByUser);
 app.post('/api/tags', db.createTag);
+app.delete('/api/tags/:id', db.removeTag);
 
 var port = process.env.PORT || config.port || 9999;
 
