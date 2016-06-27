@@ -2,6 +2,7 @@ var _ = require('lodash');
 var promise = require('bluebird');
 var github = require('octonode');
 var fs      = require('fs');
+var pagination = require('pagination');
 
 // Load config defaults from JSON file.
 // Environment variables override defaults.
@@ -82,10 +83,47 @@ function searchRepos(req, res, next) {
   });
 }
 
-function searchRepoByTag(req, res, next) {
-  var tag = req.query.tag;
+function searchReposByTag(req, res, next) {
+  var tag = req.params.tag;
+  var page = parseInt(req.params.page, 10) || 1;
+  var perPage = 10;
 
-  db.any(`SELECT * FROM tags WHERE tag = $1 ORDER BY created_at DESC`)
+  db.one("SELECT COUNT(*) FROM tags WHERE tag = $1", tag)
+    .then(function (amount) {
+      var totalResult = +amount.count || 0;
+      if (totalResult > 0) {
+        var paginator = new pagination.SearchPaginator({
+          prelink:'/',
+          current: page,
+          rowsPerPage: perPage,
+          totalResult: totalResult
+        });
+        var pageData = paginator.getPaginationData();
+
+        db.func(`fn_getreposbytag`, [tag, perPage, page])
+          .then(function (data) {
+            res.status(200)
+              .json({
+                status: 'success',
+                data: data,
+                pageData: {
+                  previous: pageData.previous,
+                  next: pageData.next,
+                  first: pageData.first,
+                  last: pageData.last,
+                },
+              });
+          })
+          .catch(function (err) {
+            return next(err);
+          });
+      } else {
+        return next('No data');
+      }
+    })
+    .catch(function (err) {
+      return next(err);
+    });
 }
 
 function appendTags(items) {
@@ -285,6 +323,7 @@ function removeTag(req, res, next) {
 module.exports = {
   retrieveRandomTags: retrieveRandomTags,
   searchRepos: searchRepos,
+  searchReposByTag: searchReposByTag,
   getTagsByRepo: getTagsByRepo,
   getTagsByUser: getTagsByUser,
   removeTag: removeTag,

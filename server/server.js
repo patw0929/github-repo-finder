@@ -85,6 +85,7 @@ app.get('/authenticate/:code', function(req, res) {
 
 app.get('/api/tags/random', db.retrieveRandomTags);
 app.get('/api/repos', db.searchRepos);
+app.get('/api/repos/:tag/:page?*', db.searchReposByTag);
 app.get('/api/tags/:owner/:repo', db.getTagsByRepo);
 app.get('/api/tags/by_user/:owner/:repo', db.getTagsByUser);
 app.post('/api/tags', db.createTag);
