@@ -133,6 +133,20 @@ function getRepoTags(repoFullName) {
   });
 }
 
+export function removeTag(repo, id) {
+  return dispatch => {
+    return axios.delete(`${config.api_uri}/tags/${id}`, {
+      headers: {
+        authorization: `token ${window.localStorage.getItem('token')}`,
+      },
+    }).then(response => {
+      dispatch(fetchTags(repo));
+    }).catch(error => {
+      console.log('removeTag error:', error);
+    });
+  };
+}
+
 export function getRepo(owner, repo) {
   return dispatch => {
     axios.all([getRepoInfo(owner, repo), getRepoTags(`${owner}/${repo}`)])
@@ -195,7 +209,7 @@ export function toggleStar(owner, repo, bool) {
   };
 }
 
-export function fetchTags(repo) {
+function fetchTags(repo) {
   return dispatch => {
     getRepoTags(repo).then(response => {
       dispatch({
