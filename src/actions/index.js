@@ -222,6 +222,10 @@ export function postTags(repo, tag, isPublic) {
     }).then(response => {
       dispatch(fetchTags(repo));
     }).catch(error => {
+      if (error.status === 409) {
+        alert('You had already sent this tag.');
+      }
+
       console.log('postTags error', error);
     });
   };
