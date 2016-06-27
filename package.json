@@ -8,6 +8,7 @@
     "start": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js",
     "build": "webpack --config webpack.production.config.js -p",
     "deploy": "gh-pages -d dist",
+    "deploy-api": "git push --force heroku `git subtree split --prefix server HEAD`:master",
     "test": "mocha --compilers js:babel-core/register --require ./test/test_helper.js --recursive ./test",
     "test:watch": "npm run test -- --watch"
   },
