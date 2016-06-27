@@ -26,11 +26,19 @@ var pgp = require('pg-promise')(options);
 var connectionString = config.pgsql_url; //'postgres://localhost:5432/github_repo_finder';
 var db = pgp(connectionString);
 
-function getGitHubUser(token) {
+function getGitHubUser(token, callback) {
   var client = github.client(token);
+  var ghme = client.me();
 
-  client.get('/user', {}, function (err, status, body, headers) {
-    return body.login;
+  ghme.info(function (err, data, headers) {
+    var username = data.login || null;
+    if (!username) {
+      throw new Error('No username!');
+    }
+
+    if (typeof callback === 'function') {
+      callback(username);
+    }
   });
 }
 
@@ -72,6 +80,12 @@ function searchRepos(req, res, next) {
       return next(err);
     }
   });
+}
+
+function searchRepoByTag(req, res, next) {
+  var tag = req.query.tag;
+
+  db.any(`SELECT * FROM tags WHERE tag = $1 ORDER BY created_at DESC`)
 }
 
 function appendTags(items) {
@@ -126,22 +140,22 @@ function getTagsByUser(req, res, next) {
 
   var owner = req.params.owner;
   var repo = req.params.repo;
-  var username = getGitHubUser(token);
-
-  db.any(`SELECT tag
-    FROM tags WHERE repo = $1 AND username = $2
-    ORDER BY created_at DESC LIMIT 20`,
-    [owner + '/' + repo, username])
-    .then(function (data) {
-      res.status(200)
-        .json({
-          status: 'success',
-          data: data
-        });
-    })
-    .catch(function (err) {
-      return next(err);
-    });
+  getGitHubUser(token, function (username) {
+    db.any(`SELECT tag
+      FROM tags WHERE repo = $1 AND username = $2
+      ORDER BY created_at DESC LIMIT 20`,
+      [owner + '/' + repo, username])
+      .then(function (data) {
+        res.status(200)
+          .json({
+            status: 'success',
+            data: data
+          });
+      })
+      .catch(function (err) {
+        return next(err);
+      });
+  });
 }
 
 function createTag(req, res, next) {
@@ -152,21 +166,22 @@ function createTag(req, res, next) {
     return next('no token');
   }
 
-  var username = getGitHubUser(token);
   req.body.data.isPublic = req.body.data.isPublic ? true : false;
-  db.none('insert into tags(username, repo, tag, isPublic)' +
-      'values($1, $2, $3, $4)',
-    [username, req.body.data.repo, req.body.data.tag, req.body.data.isPublic])
-    .then(function () {
-      res.status(200)
-        .json({
-          status: 'success',
-          message: 'Inserted'
-        });
-    })
-    .catch(function (err) {
-      return next(err);
-    });
+
+  getGitHubUser(token, function (username) {
+    db.none('INSERT INTO tags (username, repo, tag, isPublic)' +
+        'VALUES($1, $2, $3, $4)',
+      [username, req.body.data.repo, req.body.data.tag, req.body.data.isPublic])
+      .then(function () {
+        res.status(200)
+          .json({
+            status: 'success'
+          });
+      })
+      .catch(function (err) {
+        return next(err);
+      });
+  });
 }
 
 module.exports = {
