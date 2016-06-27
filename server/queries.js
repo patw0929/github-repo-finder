@@ -169,14 +169,31 @@ function createTag(req, res, next) {
   req.body.data.isPublic = req.body.data.isPublic ? true : false;
 
   getGitHubUser(token, function (username) {
-    db.none('INSERT INTO tags (username, repo, tag, isPublic)' +
-        'VALUES($1, $2, $3, $4)',
-      [username, req.body.data.repo, req.body.data.tag, req.body.data.isPublic])
-      .then(function () {
-        res.status(200)
-          .json({
-            status: 'success'
-          });
+    db.one('SELECT COUNT(*) FROM tags WHERE username = $1 AND tag = $2',
+      [username, req.body.data.tag])
+      .then(function (data) {
+        console.log(data);
+
+        if (data === 0) {
+          db.none('INSERT INTO tags (username, repo, tag, isPublic)' +
+              'VALUES($1, $2, $3, $4)',
+            [username, req.body.data.repo, req.body.data.tag, req.body.data.isPublic])
+            .then(function () {
+              res.status(200)
+                .json({
+                  status: 'success'
+                });
+            })
+            .catch(function (err) {
+              return next(err);
+            });
+        } else {
+          res.status(409)
+            .json({
+              status: 'failed',
+              message: 'duplicated tag by you'
+            });
+        }
       })
       .catch(function (err) {
         return next(err);
