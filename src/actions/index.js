@@ -5,6 +5,7 @@ import {
   UNAUTH_USER,
   GET_USER,
   SEARCH_REPOS,
+  SEARCH_REPOS_BY_TAG,
   ENTER_KEYWORD,
   GET_REPO,
   GET_STAR_STATUS,
@@ -82,7 +83,6 @@ export function enterKeyword(keyword) {
 
 export function searchRepos(keyword, page = 1) {
   return dispatch => {
-    // axios.get(`${GITHUB_API_URL}/search/repositories?q=${keyword}&page=${page}`, {
     axios.get(`${config.api_uri}/repos?q=${keyword}&page=${page}`, {
       headers: {
         authorization: `token ${window.localStorage.getItem('token')}`,
@@ -115,6 +115,25 @@ export function searchRepos(keyword, page = 1) {
       console.log('searchRepos error:', error);
     });
   };
+}
+
+export function searchReposByTag(tag, page = 1) {
+  return dispatch => {
+    axios.get(`${config.api_uri}/repos/${tag}/${page}`)
+      .then(response => {
+        dispatch({
+          type: SEARCH_REPOS_BY_TAG,
+          payload: {
+            repos: response.data.data,
+            pages: response.data.pageData,
+            tag,
+          },
+        });
+      })
+      .catch(error => {
+        console.log('searchReposByTag error:', error);
+      })
+  }
 }
 
 function getRepoInfo(owner, repo) {
