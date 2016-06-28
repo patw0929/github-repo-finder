@@ -12,6 +12,7 @@ import {
   TOGGLE_STAR,
   FETCH_TAGS,
   CLEAN_REPO,
+  GET_RANDOM_TAGS,
 } from './types';
 import config from '../config';
 import { parsePage } from '../utils';
@@ -163,6 +164,21 @@ export function removeTag(repo, id) {
     }).catch(error => {
       console.log('removeTag error:', error);
     });
+  };
+}
+
+export function getRandomTags() {
+  return dispatch => {
+    return axios.get(`${config.api_uri}/tags/random`)
+      .then(response => {
+        dispatch({
+          type: GET_RANDOM_TAGS,
+          payload: response.data.data,
+        });
+      })
+      .catch(error => {
+        console.log('getRandomTags error:', error);
+      });
   };
 }
 

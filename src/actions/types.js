@@ -9,3 +9,4 @@ export const GET_STAR_STATUS = 'GET_STAR_STATUS';
 export const TOGGLE_STAR = 'TOGGLE_STAR';
 export const FETCH_TAGS = 'FETCH_TAGS';
 export const CLEAN_REPO = 'CLEAN_REPO';
+export const GET_RANDOM_TAGS = 'GET_RANDOM_TAGS';
