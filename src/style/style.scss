@@ -193,3 +193,12 @@ body {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   }
 }
+
+.random-tags {
+  margin: 15px 0;
+}
+
+.random-tags__tag {
+  display: inline-block;
+  margin: 0 5px 5px 0;
+}

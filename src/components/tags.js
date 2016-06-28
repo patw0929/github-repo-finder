@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { searchReposByTag } from '../actions';
+import { Link } from 'react-router';
+import { searchReposByTag, getRandomTags } from '../actions';
 import DetailView from './repos/detailView';
 
 class Tags extends Component {
@@ -20,6 +21,17 @@ class Tags extends Component {
     this.setState({
       tag: this.props.tag,
     });
+
+    this.props.getRandomTags();
+  }
+
+  clickRandomTag(tag) {
+    if (tag) {
+      this.setState({
+        tag,
+      });
+      this.props.searchReposByTag(tag, 1);
+    }
   }
 
   handleChangeSearch(e) {
@@ -37,7 +49,7 @@ class Tags extends Component {
   }
 
   render() {
-    const { repos } = this.props;
+    const { repos, randomTags } = this.props;
 
     return (
       <div>
@@ -53,6 +65,19 @@ class Tags extends Component {
             />
             <button type="submit"
               className="btn btn-primary">Search</button>
+          </div>
+
+          <div className="random-tags">
+            {randomTags && randomTags.map(tag => {
+              return (
+                <Link key={tag}
+                  className="random-tags__tag label label-success"
+                  to={`/tags/${tag}`}
+                  onClick={() => {this.clickRandomTag(tag)}}>
+                  {tag}
+                </Link>
+              );
+            })}
           </div>
         </form>
 
@@ -88,7 +113,11 @@ function mapStateToProps(state) {
     tag: state.tags.tag,
     repos: state.tags.repos,
     pages: state.tags.pages,
+    randomTags: state.randomTags,
   };
 }
 
-export default connect(mapStateToProps, { searchReposByTag })(Tags);
+export default connect(mapStateToProps, {
+  searchReposByTag,
+  getRandomTags,
+})(Tags);
