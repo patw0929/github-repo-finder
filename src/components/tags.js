@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import { findDOMNode } from 'react-dom';
 import { connect } from 'react-redux';
 import { searchReposByTag } from '../actions';
 import DetailView from './repos/detailView';
@@ -7,16 +6,32 @@ import DetailView from './repos/detailView';
 class Tags extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      tag: '',
+    };
   }
 
   static contextTypes = {
     router: PropTypes.object,
   };
 
+  componentWillMount() {
+    this.setState({
+      tag: this.props.tag,
+    });
+  }
+
+  handleChangeSearch(e) {
+    this.setState({
+      tag: e.target.value,
+    });
+  }
+
   handleSubmit(e) {
     e.preventDefault();
 
-    const tag = findDOMNode(this.refs.tag).value;
+    const tag = this.state.tag;
     this.props.searchReposByTag(tag, 1);
     this.context.router.push(`/tags/${tag}`)
   }
@@ -30,10 +45,11 @@ class Tags extends Component {
           className="search-form form-inline">
           <div className="form-group">
             <input type="search"
-              ref="tag"
               name="tag"
               placeholder="Please enter the tag..."
               className="search-input form-control"
+              onChange={(e) => {this.handleChangeSearch(e)}}
+              value={this.state.tag}
             />
             <button type="submit"
               className="btn btn-primary">Search</button>
