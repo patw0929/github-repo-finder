@@ -5,6 +5,7 @@ import userReducer from './user';
 import reposReducer from './repos';
 import repoReducer from './repo';
 import tagsReducer from './tags';
+import randomTagsReducer from './randomTags';
 
 const rootReducer = combineReducers({
   authenticated: authReducer,
@@ -12,6 +13,7 @@ const rootReducer = combineReducers({
   repos: reposReducer,
   repo: repoReducer,
   tags: tagsReducer,
+  randomTags: randomTagsReducer,
   form: formReducer,
 });
 
